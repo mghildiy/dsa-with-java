@@ -66,15 +66,52 @@ public class IntegerLinkedList {
         return head == null;
     }
 
-    public void printList() {
+    public void traverseIteratively() {
         IntegerNode current = head;
-        System.out.print("HEAD -> ");
+        //System.out.println("HEAD -> ");
         while (current != null) {
             System.out.print(current);
             System.out.print(" -> ");
             current = current.getNext();
         }
         System.out.println("null");
+    }
+
+    public void traverseRecursively() {
+        traverseRecursively(this.head);
+    }
+
+    private void traverseRecursively(IntegerNode node) {
+        if(node == null) {
+            System.out.println("null");
+            return;
+        }
+
+        System.out.print(node.getValue());
+        System.out.print(" -> ");
+        traverseRecursively(node.getNext());
+    }
+
+    public IntegerLinkedList reverseRecursively() {
+        if(this.head == null)
+            return null;
+
+        IntegerNode  headOfNewList = reverseRecursively(this.head, null);
+
+        IntegerLinkedList reversed =  new IntegerLinkedList();
+        reversed.head = headOfNewList;
+
+        return reversed;
+    }
+
+    private IntegerNode reverseRecursively(IntegerNode node, IntegerNode previous) {
+        if(node == null) {
+            return previous;
+        }
+
+        IntegerNode next = node.getNext();
+        node.setNext(previous);
+        return reverseRecursively(next, node);
     }
 
     public IntegerLinkedList reverse() {
@@ -100,6 +137,29 @@ public class IntegerLinkedList {
         reversed.size = this.size;
 
         return reversed;
+    }
+
+    public int sumIteratively() {
+        IntegerNode current = this.head;
+        int sum = 0;
+        while(current != null) {
+            sum += current.getValue();
+            current = current.getNext();
+        }
+
+        return sum;
+    }
+
+    public int sumRecursively() {
+        return sumRecur(this.head);
+    }
+
+    private int sumRecur(IntegerNode head) {
+        if(head == null) {
+            return 0;
+        }
+
+        return head.getValue() + sumRecur(head.getNext());
     }
 
 }

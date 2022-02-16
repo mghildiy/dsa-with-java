@@ -1,7 +1,6 @@
 package ds.tree.binarytree;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class BinaryTree {
 
@@ -53,9 +52,107 @@ public class BinaryTree {
     }
 
     private int maxRootToLeafSumRecursively(Node node, int sumSoFar) {
-        if(node == null) return sumSoFar;
+        if(node == null) {
+            return sumSoFar;
+        }
 
         return Math.max(maxRootToLeafSumRecursively(node.getLeft(), sumSoFar + node.getValue()),
                 maxRootToLeafSumRecursively(node.getRight(), sumSoFar + node.getValue()));
+    }
+
+    public List<Node> findAncestors(int value) {
+        if(this.root == null) {
+            throw new IllegalStateException("Tree is empty");
+        }
+
+        List<Node> ancestors = findAncestorsRecursively(this.root, value);
+        if(!ancestors.isEmpty()) {
+            ancestors.remove(0);
+            return ancestors;
+        }
+        throw new IllegalStateException("Element not found");
+    }
+
+    public List<Node> findAncestorsRecursively(Node node, int value) {
+        if(node == null) {
+            return new ArrayList<>();
+        }
+        if(node.getValue() == value){
+            return new ArrayList<>(Arrays.asList(node));
+        }
+
+        List<Node> leftSideAncestors = findAncestorsRecursively(node.getLeft(), value);
+        if(!leftSideAncestors.isEmpty()) {
+            leftSideAncestors.add(node);
+            return leftSideAncestors;
+        } else {
+            List<Node> rightSideAncestors = findAncestorsRecursively(node.getRight(), value);
+            if(!rightSideAncestors.isEmpty()) {
+                rightSideAncestors.add(node);
+                return rightSideAncestors;
+            }
+        }
+
+        return new ArrayList<>();
+    }
+
+    public List<Node>  findLeftView() {
+        List<Node> leftView = new ArrayList<>();
+        return findLeftViewRecursively(this.root);
+    }
+
+    private List<Node> findLeftViewRecursively(Node node) {
+        List<Node> leftView = new ArrayList<>();
+        if(node == null) return leftView;
+
+        leftView.add(node);
+        List<Node> leftLeftView = findLeftViewRecursively(node.getLeft());
+        List<Node> rightLeftView = findLeftViewRecursively(node.getRight());
+
+        // merge if needed
+        if(leftLeftView.size() < rightLeftView.size()) {
+            leftLeftView.addAll(rightLeftView.subList(leftLeftView.size(), rightLeftView.size()));
+        }
+        leftView.addAll(leftLeftView);
+
+        return leftView;
+    }
+
+    /*private void findLeftViewRecursively(Node node, List<Node> li) {
+        if(node == null) return;
+        li.add(node);
+        if(node.getLeft() == null && node.getRight() == null) return;
+
+        if(node.getLeft() != null) {
+            findLeftViewRecursively(node.getLeft(), li);
+        } else {
+            //li.add(node.getRight());
+            findLeftViewRecursively(node.getRight(), li);
+        }
+    }*/
+
+    public List<Node> findLeftViewIterativeLy() {
+        Map<Integer, List<Node>> levelByNodes = new HashMap<>();
+        List<Node> leftView = new ArrayList<>();
+        if(this.root == null) return leftView;
+        levelByNodes.put(1, Arrays.asList(this.root));
+        int currentLevel = 1;
+        while(levelByNodes.get(currentLevel).size() != 0) {
+            List<Node> nodesInCurrentLevel = levelByNodes.get(currentLevel);
+            leftView.add(nodesInCurrentLevel.get(0));
+            List<Node> nodesInNextLevel = new ArrayList<>();
+            for(Node node : nodesInCurrentLevel) {
+                if(node.getLeft() != null) {
+                    nodesInNextLevel.add(node.getLeft());
+                }
+                if(node.getRight() != null) {
+                    nodesInNextLevel.add(node.getRight());
+                }
+            }
+            ++currentLevel;
+            levelByNodes.put(currentLevel, nodesInNextLevel);
+        }
+
+        return leftView;
     }
 }

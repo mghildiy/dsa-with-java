@@ -2,6 +2,7 @@ package ds.tree.binarytree.bst;
 
 import ds.tree.binarytree.BinaryTree;
 import ds.tree.binarytree.Node;
+import io.vavr.Tuple2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,6 +38,57 @@ public class BSTree extends BinaryTree {
                 addNodeRecursively(node.getRight(), value);
             }
         }
+    }
+
+    public void delete(int value) {
+        if(this.root == null)
+            return;
+
+        Tuple2<Node, Node> parentAndChild = searchWithParent(root, value, null);
+        if(parentAndChild != null) {
+            if(parentAndChild._1 == null) {
+                this.root = null;
+            } else {
+                Node parent = parentAndChild._1;
+                Node child = parentAndChild._2;
+                if(parent.getLeft() == child) {
+                    parent.setLeft(rearrangeNodesForDeletion(child));
+                } else {
+                    parent.setRight(rearrangeNodesForDeletion(child));
+                }
+            }
+        }
+    }
+
+    private Node rearrangeNodesForDeletion(Node node) {
+        // both child are absent, so parent of input node would get null child
+        if(node.getLeft() == null && node.getRight() == null) {
+            return null;
+        } else {
+            // if one of the child is absent, other child would become child of parent of input node
+            return node.getLeft() == null ? node.getRight() : node.getLeft();
+            // WIP
+            // if both child are present, left child of input node would now become child of parent of input node
+        }
+    }
+
+    private Tuple2<Node, Node> searchWithParent(Node node, int value, Node parent) {
+        if(node.getValue() == value) {
+            Tuple2<Node, Node> parentAndChild = new Tuple2<>(parent, node);
+            return parentAndChild;
+        }
+
+        if(node.getValue() > value) {
+            if(node.getLeft() != null) {
+                return searchWithParent(node.getLeft(), value, node);
+            }
+        } else {
+            if(node.getRight() != null) {
+                return searchWithParent(node.getRight(), value, node);
+            }
+        }
+
+        return null;
     }
 
     public Node search(int value) {

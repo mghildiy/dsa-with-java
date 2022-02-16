@@ -1,5 +1,9 @@
 package ds.tree.binarytree.bst;
 
+import ds.tree.binarytree.Node;
+
+import java.util.List;
+
 public class Test {
 
     public static void main(String[] args) {
@@ -13,6 +17,9 @@ public class Test {
         tree.add(26);
         tree.add(22);
         tree.add(32);
+
+        List<Node> leftView = tree.findLeftViewIterativeLy();
+        leftView = tree.findLeftView();
 
         // tree.levelTraverse();
         // tree.preOrderTraverse();

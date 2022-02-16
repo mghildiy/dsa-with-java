@@ -11,14 +11,22 @@ public class Main {
 
         IntegerLinkedList list = new IntegerLinkedList();
         list.insertSorted(three);
-        list.printList();
+        //list.traverseIteratively();
         list.insertSorted(two);
-        list.printList();
+        //list.traverseIteratively();
         list.insertSorted(one);
-        list.printList();
+        //list.traverseIteratively();
         list.insertSorted(four);
-        list.printList();
+        list.traverseIteratively();
+        list.traverseRecursively();
 
-        list.reverse().printList();
+        list = list.reverse();
+        list.traverseIteratively();
+
+        System.out.println("Iterative sum:"+list.sumIteratively());
+        System.out.println("Recursive sum:"+list.sumRecursively());
+
+        list = list.reverseRecursively();
+        System.out.println("Recursive sum:"+list.sumRecursively());
     }
 }
