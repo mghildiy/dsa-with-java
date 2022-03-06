@@ -18,6 +18,8 @@ public class Test {
         tree.add(22);
         tree.add(32);
 
+        System.out.println("Height:"+ tree.height());
+
         List<Node> leftView = tree.findLeftViewIterativeLy();
         leftView = tree.findLeftView();
 
@@ -42,5 +44,10 @@ public class Test {
         System.out.println("Tree sum:"+ tree.sum());
 
         System.out.println("Max root to leaf sum:"+ tree.maxRootToLeafSum());
+
+        tree.invert();
+        tree.add(40);
+        tree.add(35);
+        System.out.println("Balanced:"+tree.isBalanced());
     }
 }
