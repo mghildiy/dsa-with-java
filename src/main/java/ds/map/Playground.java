@@ -54,7 +54,7 @@ public class Playground {
         }
 
         /*
-         Concurrent map provides thread safety(unlike Map) with better performance(compared to thread saf options like HashTable, Collections.synchronizedMap).
+         Concurrent map provides thread safety(unlike Map) with better performance(compared to thread safe options like HashTable, Collections.synchronizedMap).
          Basic mechanism is to maintain a list of locks(number of locks is configured using concurrencyLevel which has default value of 16).
          So at a given time number of threads which can manipulate(add, update) map is decided by concurrencyLevel.
          If there are  less threads than concurrencyLevel it would lead to contention, meaning performance degradation.
